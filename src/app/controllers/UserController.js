@@ -3,13 +3,13 @@ import User from '../models/User';
 class UserController {
   async store(req, res) {
     const schema = Yup.object().shape({
-      name: Yup.string().required(),
+      nome: Yup.string().required(),
       email: Yup.string().email().required(),
-      password: Yup.string().required().min(6),
+      senha: Yup.string().required().min(6),
     });
 
     if (!(await schema.isValid(req.body))) {
-      return res.status(400).json({ erro: 'Validação do dados falhou!' });
+      return res.status(400).json({ erro: 'Validação dos dados falhou!' });
     }
 
     const UsuarioExiste = await User.findOne({
@@ -20,26 +20,26 @@ class UserController {
       return res.status(400).json({ erro: 'Usuario já existente.' });
     }
 
-    const { id, name, email } = await User.create(req.body);
+    const { id, nome, email } = await User.create(req.body);
 
     return res.json({
       id,
-      name,
+      nome,
       email,
     });
   }
   async update(req, res) {
     const schema = Yup.object().shape({
-      name: Yup.string(),
+      nome: Yup.string(),
       email: Yup.string().email(),
-      oldPassword: Yup.string().min(6),
-      password: Yup.string()
+      oldSenha: Yup.string().min(6),
+      senha: Yup.string()
         .min(6)
-        .when('oldPassword', (oldPassword, field) =>
-          oldPassword ? field.required() : field
+        .when('oldSenha', (oldSenha, field) =>
+          oldSenha ? field.required() : field
         ),
-      confirmPassword: Yup.string().when('password', (password, field) =>
-        password ? field.required().oneOf([Yup.ref('password')]) : field
+      confirmSenha: Yup.string().when('senha', (senha, field) =>
+        senha ? field.required().oneOf([Yup.ref('senha')]) : field
       ),
     });
 
@@ -47,7 +47,7 @@ class UserController {
       return res.status(400).json({ erro: 'Validação do dados falhou!' });
     }
 
-    const { email, oldPassword } = req.body;
+    const { email, oldSenha } = req.body;
     const user = await User.findByPk(req.userId);
     if (
       email &&
@@ -61,14 +61,14 @@ class UserController {
         .json({ erro: 'E-mail já utilizado por outro usuário.' });
     }
 
-    if (oldPassword && !(await user.checkPassword(oldPassword))) {
+    if (oldSenha && !(await user.checkSenha(oldSenha))) {
       return res.status(401).json({ erro: 'Senha não combina' });
     }
-    const { id, name } = await user.update(req.body);
+    const { id, nome } = await user.update(req.body);
 
     return res.json({
       id,
-      name,
+      nome,
       email,
     });
   }

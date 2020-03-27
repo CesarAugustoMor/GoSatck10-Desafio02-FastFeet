@@ -7,16 +7,14 @@ import authConfig from '../../config/auth';
 class SessionController {
   async store(req, res) {
     const schema = Yup.object().shape({
-      email: Yup.string()
-        .email()
-        .required(),
-      password: Yup.string().required(),
+      email: Yup.string().email().required(),
+      senha: Yup.string().required(),
     });
 
     if (!(await schema.isValid(req.body))) {
       return res.status(400).json({ erro: 'Validação do dados falhou!' });
     }
-    const { email, password } = req.body;
+    const { email, senha } = req.body;
 
     const user = await User.findOne({ where: { email } });
 
@@ -24,16 +22,16 @@ class SessionController {
       return res.status(401).json({ error: 'Usuario não encontrado' });
     }
 
-    if (!(await user.checkPassword(password))) {
-      return res.status(401).json({ error: 'Password não bate' });
+    if (!(await user.checkSenha(senha))) {
+      return res.status(401).json({ error: 'Senha não bate' });
     }
 
-    const { id, name } = user;
+    const { id, nome } = user;
 
     return res.json({
       user: {
         id,
-        name,
+        nome,
         email,
       },
       token: jwt.sign({ id }, authConfig.secret, {

@@ -6,9 +6,10 @@ module.exports = {
       'users',
       [
         {
-          name: 'Distribuidora FastFeet',
+          nome: 'Distribuidora FastFeet',
           email: 'admin@fastfeet.com',
-          password_hash: bcrypt.hashSync('123456', 8),
+          senha_hash: bcrypt.hashSync('123456', 8),
+          administrador: true,
           created_at: new Date(),
           updated_at: new Date(),
         },
@@ -17,7 +18,5 @@ module.exports = {
     );
   },
 
-  down: (queryInterface) => {
-    return queryInterface.bulkDelete('People', null, {});
-  },
+  down: () => {},
 };
