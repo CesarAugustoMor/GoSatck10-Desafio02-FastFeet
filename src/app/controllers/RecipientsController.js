@@ -17,12 +17,15 @@ class RecipientsController {
       return res.status(400).json({ erro: 'Validação dos dados falhou!' });
     }
 
+    if (await Recipients.findOne({ where: req.body })) {
+      return res.status(400).json({ erro: 'Este endereço já existe' });
+    }
+
     const { id } = await Recipients.create(req.body);
     return res.json({ id, ...req.body });
   }
   async update(req, res) {
     const schema = Yup.object().shape({
-      id: Yup.number().required(),
       nome: Yup.string(),
       rua: Yup.string(),
       numero: Yup.number(),
@@ -37,7 +40,7 @@ class RecipientsController {
       return res.status(400).json({ erro: 'Validação do dados falhou!' });
     }
 
-    const destinatario = await Recipients.findByPk(req.body.id);
+    const destinatario = await Recipients.findByPk(req.params.id);
 
     if (!destinatario) {
       return res.status(400).json({ erro: 'Destinatario não encontrado!' });
