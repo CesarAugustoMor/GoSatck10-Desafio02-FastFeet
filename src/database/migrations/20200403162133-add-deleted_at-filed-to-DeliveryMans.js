@@ -2,13 +2,13 @@
 
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.addColumn('deliverys', 'deleted_at', {
+    return queryInterface.addColumn('delivery_mans', 'deleted_at', {
       type: Sequelize.DATE,
       allowNull: true,
     });
   },
 
   down: (queryInterface, Sequelize) => {
-    return queryInterface.removeColumn('deliverys', 'deleted_at');
+    return queryInterface.removeColumn('delivery_mans', 'deleted_at');
   },
 };
