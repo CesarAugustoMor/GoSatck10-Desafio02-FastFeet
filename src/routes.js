@@ -27,4 +27,9 @@ routes.use(authAdmMiddleware);
 routes.post('/recipients', RecipientsController.store);
 routes.put('/recipients/:id', RecipientsController.update);
 
+routes.get('/deliverys', DeliverysController.index);
+routes.post('/deliverys', DeliverysController.store);
+routes.put('/deliverys/:id', DeliverysController.update);
+routes.delete('/deliverys/:id', DeliverysController.delete);
+
 export default routes;

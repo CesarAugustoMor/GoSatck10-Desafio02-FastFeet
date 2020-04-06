@@ -3,10 +3,11 @@ import Sequelize from 'sequelize';
 import User from '../app/models/User';
 import Recipients from '../app/models/Recipients';
 import File from '../app/models/File';
+import Deliverys from '../app/models/Deliverys';
 
 import databaseConfig from '../config/database';
 
-const models = [User, Recipients, File];
+const models = [File, User, Recipients, Deliverys];
 
 class Database {
   constructor() {
@@ -16,7 +17,9 @@ class Database {
   init() {
     this.conection = new Sequelize(databaseConfig);
 
-    models.map(model => model.init(this.conection));
+    models
+      .map(model => model.init(this.conection))
+      .map(model => model.associate && model.associate(this.conection.models));
   }
 }
 
