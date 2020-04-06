@@ -1,5 +1,4 @@
 import * as Yup from 'yup';
-import { Op } from 'sequelize';
 
 import DeliveryMan from '../models/DeliveryMan';
 import File from '../models/File';
@@ -7,10 +6,11 @@ import File from '../models/File';
 class DeliveryManController {
   async index(req, res) {
     const { page = 1 } = req.query;
+    const tamanhoPagina = 20;
     return res.json(
       await DeliveryMan.findAll({
-        limit: 20,
-        offset: (page - 1) * 20,
+        limit: tamanhoPagina,
+        offset: (page - 1) * tamanhoPagina,
         include: [
           {
             model: File,
@@ -52,7 +52,8 @@ class DeliveryManController {
         erro: 'Entregador já existente anteriormente. Contate Administração.',
       });
     }
-    return res.json(delivery);
+    const { id, nome, email, avatar_id } = await DeliveryMan.create(req.body);
+    return res.json({ id, nome, email, avatar_id });
   }
   async update(req, res) {
     const schema = Yup.object().shape({
