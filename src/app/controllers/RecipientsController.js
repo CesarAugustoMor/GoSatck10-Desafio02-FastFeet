@@ -46,7 +46,29 @@ class RecipientsController {
       return res.status(400).json({ erro: 'Destinatario não encontrado!' });
     }
 
-    return res.json(await destinatario.update(req.body));
+    const {
+      id,
+      nome,
+      rua,
+      numero,
+      complemento,
+      bairro,
+      cidade,
+      estado,
+      cep,
+    } = await destinatario.update(req.body);
+
+    return res.json({
+      id,
+      nome,
+      rua,
+      numero,
+      complemento,
+      bairro,
+      cidade,
+      estado,
+      cep,
+    });
   }
 }
 

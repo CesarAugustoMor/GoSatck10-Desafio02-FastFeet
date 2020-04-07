@@ -18,6 +18,7 @@ class DeliveryManController {
             attributes: ['path', 'url'],
           },
         ],
+        attributes: ['id', 'nome', 'email'],
       })
     );
   }
@@ -100,7 +101,7 @@ class DeliveryManController {
     ) {
       return res.status(400).json({ erro: 'Id não encontrado!' });
     }
-    return res.json();
+    return res.send();
   }
 }
 
