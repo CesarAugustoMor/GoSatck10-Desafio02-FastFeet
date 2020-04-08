@@ -26,6 +26,11 @@ routes.post('/files', upload.single('file'), FileController.store);
 routes.use(authMiddleware);
 
 routes.get('/deliverys/:idDeliveryMan', DeliverysOpenController.index);
+routes.put(
+  '/deliverys/:idDeliveryMan/:idDelivery',
+  DeliverysOpenController.update
+);
+
 routes.get('/deliveryMan/:id/deliveries', DeliverysFinishController.index);
 
 routes.use(authUserMiddleware);

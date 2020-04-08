@@ -112,7 +112,7 @@ class DeliveryController {
     });
   }
   async update(req, res) {
-    const encomenda = await DeliveryMan.findByPk(req.params.id);
+    const encomenda = await Delivery.findByPk(req.params.id);
     if (!encomenda) {
       return res.status(400).json({ erro: 'Encomenda não Existe.' });
     }
