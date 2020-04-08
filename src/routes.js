@@ -15,6 +15,8 @@ import DeliverysFinishController from './app/controllers/DeliverysFinishControll
 import authMiddleware from './app/middlewares/auth';
 import authAdmMiddleware from './app/middlewares/authAdmin';
 import authUserMiddleware from './app/middlewares/authUser';
+import DeliveryProblemDistribuidoraController from './app/controllers/DeliveryProblemDistribuidoraController';
+import DeliveryProblemController from './app/controllers/DeliveryProblemController';
 
 const routes = new Router();
 
@@ -25,6 +27,12 @@ routes.post('/files', upload.single('file'), FileController.store);
 
 routes.use(authMiddleware);
 
+routes.get('/deliverys/problems', DeliveryProblemDistribuidoraController.index);
+routes.delete(
+  '/problem/:id/cancel-delivery',
+  DeliveryProblemDistribuidoraController.delete
+);
+
 routes.get('/deliverys/:idDeliveryMan', DeliverysOpenController.index);
 routes.put(
   '/deliverys/:idDeliveryMan/:idDelivery',
@@ -32,6 +40,9 @@ routes.put(
 );
 
 routes.get('/deliveryMan/:id/deliveries', DeliverysFinishController.index);
+
+routes.get('/deliverys/:id/problems', DeliveryProblemController.index);
+routes.post('/deliverys/:id/problems', DeliveryProblemController.store);
 
 routes.use(authUserMiddleware);
 

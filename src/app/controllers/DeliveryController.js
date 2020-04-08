@@ -146,6 +146,7 @@ class DeliveryController {
       delivery_man_id,
       recipient_id,
     });
+    await encomenda.save();
 
     return res.json({
       id,

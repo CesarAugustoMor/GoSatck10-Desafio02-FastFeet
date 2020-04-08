@@ -7,6 +7,7 @@ class Delivery extends Model {
         product: Sequelize.STRING,
         start_date: Sequelize.INTEGER,
         end_date: Sequelize.INTEGER,
+        canceled_at: Sequelize.DATE,
       },
       {
         paranoid: true,
