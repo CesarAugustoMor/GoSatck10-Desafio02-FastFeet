@@ -1,6 +1,6 @@
 import { Op } from 'sequelize';
 import * as Yup from 'yup';
-import { startOfDay, endOfDay, parseISO } from 'date-fns';
+import { startOfDay, endOfDay, parseISO, isWithinInterval } from 'date-fns';
 
 import Delivery from '../models/Delivery';
 import DeliveryMan from '../models/DeliveryMan';
@@ -102,15 +102,45 @@ class DeliverysOpenController {
     if (!(await schema.isValid(req.body))) {
       return res.status(400).json({ erro: 'Validação do dados falhou!' });
     }
+    // valida hora da retirada do produto pelo entregador
+    const now = new Date();
+    const morning = new Date().setHours(8, 0, 0);
+    const afternoon = new Date().setHours(18, 0, 0);
+    const periodValid = isWithinInterval(now, {
+      start: morning,
+      end: afternoon,
+    });
+    if (!periodValid) {
+      return res.status(400).json({
+        error: 'Retirada do produto só pode ser feita das 08:00h às 18:00h',
+      });
+    }
 
     if (start_date) {
+      // valida hora da retirada do produto pelo entregador
+      const morning = new Date().setHours(8, 0, 0);
+      const afternoon = new Date().setHours(18, 0, 0);
+      const periodValid = isWithinInterval(date, {
+        start: morning,
+        end: afternoon,
+      });
+      if (!periodValid) {
+        return res.status(400).json({
+          error: 'Retirada do produto só pode ser feita das 08:00h às 18:00h',
+        });
+      }
       const {
         id,
         signature_id,
         start_date: data_inicial,
         end_date,
       } = await encomenda.update({ start_date });
-      return res.json({ id, signature_id, start_date: data_inicial, end_date });
+      return res.json({
+        id,
+        signature_id,
+        start_date: data_inicial,
+        end_date,
+      });
     }
     if (end_date) {
       const {
